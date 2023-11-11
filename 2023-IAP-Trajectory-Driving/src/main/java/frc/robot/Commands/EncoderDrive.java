@@ -24,8 +24,8 @@ public class EncoderDrive extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-  dt.resetEncoders();
-  dt.tankDrive(0, 0);
+    dt.resetEncoders();
+    dt.tankDrive(0, 0);
   }
     
   // Called every time the scheduler runs while the command is scheduled.
@@ -39,6 +39,7 @@ public class EncoderDrive extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     dt.tankDrive(0, 0);
+    dt.resetEncoders();
   }
 
   // Returns true when the command should end.
