@@ -15,8 +15,10 @@ import frc.robot.Subsystems.DriveTrain;
 
 public class RobotContainer {
 
-  private DriveTrain dt = new DriveTrain();
-  private Joystick j = new Joystick(0);
+  public static DriveTrain dt = new DriveTrain();
+  public static Joystick j = new Joystick(0);
+  
+  
   public RobotContainer() {
     dt.setDefaultCommand(new TankDrive(dt, j));
     configureBindings();

@@ -24,7 +24,7 @@ public class PIDTurnCCW extends CommandBase {
     stinkypoopoo.setTolerance(5); //Tells the robot how much it can be different from the angle we want
     this.setPointAngle = setPointAngle; //sets variable setPointAngle = setPointAngle
     addRequirements (dt);
-  if (setPointAngle > 0){ //tells what the robot to do if setPointAngle is negative or going counterclockwise
+  if (setPointAngle >= 0){ //tells what the robot to do if setPointAngle is negative or going counterclockwise
     motorsign = 1;
   }else { //tells what the robot to do if setPointAngle is positive or going clockwise
     motorsign = -1;

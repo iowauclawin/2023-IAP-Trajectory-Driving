@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 
 import com.kauailabs.navx.frc.AHRS;
 
@@ -50,8 +51,7 @@ public class DriveTrain extends SubsystemBase
   private DifferentialDrive drive;
   private Field2d m_Field = new Field2d();
   /** Creates a new DriveTrain */
-  public DriveTrain() 
-  {
+  public DriveTrain() {
     leftDriveTalon = new WPI_TalonSRX(Constants.OperatorConstants.LeftDriveTalonPort); //Creating an object by using a constructor for leftDriveTalon
     rightDriveTalon = new WPI_TalonSRX(Constants.OperatorConstants.RightDriveTalonPort); //Same as above except for rightDriveTalon
     
@@ -61,8 +61,8 @@ public class DriveTrain extends SubsystemBase
     leftDriveTalon.setNeutralMode(NeutralMode.Coast); //Sets leftDriveTalon to neutral
     rightDriveTalon.setNeutralMode(NeutralMode.Coast); //Sets rightDriveTalon to neutral
 
-    leftDriveTalon.setInverted(true); //Make sure the leftDriveTalon is inverted compared to the rightDriveTalon so it can move forward and backward correctly
-    rightDriveTalon.setInverted(false); //Make sure the rightDriveTalon is inverted compared to the leftDriveTalon so it can move forward and backward correctly
+    leftDriveTalon.setInverted(false); //Make sure the leftDriveTalon is inverted compared to the rightDriveTalon so it can move forward and backward correctly
+    rightDriveTalon.setInverted(true); //Make sure the rightDriveTalon is inverted compared to the leftDriveTalon so it can move forward and backward correctly
 
     leftDriveTalon.setSensorPhase(true); //Sets the sensors for leftDriveTalon to true
     rightDriveTalon.setSensorPhase(true); //Sets the sensors for rightDriveTalon to true
@@ -74,6 +74,8 @@ public class DriveTrain extends SubsystemBase
     // Create the simulation model of our drivetrain.
 
     odometry = new DifferentialDriveOdometry(navx.getRotation2d(), getLeftDistance(), getRightDistance());
+
+    
 m_driveSim = new DifferentialDrivetrainSim(
   // Create a linear system from our identification gains.
   LinearSystemId.identifyDrivetrainSystem(Constants.RamseteConstants.kV,
@@ -107,8 +109,8 @@ m_driveSim = new DifferentialDrivetrainSim(
   }
 
   public void resetEncoders() {
-    leftDriveTalon.setSelectedSensorPosition(0); //Sets sensor position of leftDriveTalon to 0,0,10
-    rightDriveTalon.setSelectedSensorPosition(0); //Sets sensor position of rightDriveTalon to 0,0,10
+    leftDriveTalon.setSelectedSensorPosition(0); //Sets sensor position of leftDriveTalon to 0
+    rightDriveTalon.setSelectedSensorPosition(0); //Sets sensor position of rightDriveTalon to 0
   }
 
   public double getTicks() {
@@ -122,7 +124,7 @@ m_driveSim = new DifferentialDrivetrainSim(
     return Math.PI*Units.inchesToMeters(6.0)* getTicks()/4096.0;
   }
   public double getAngle(){ //Gets the robot's current angle
-    return navx.getAngle(); 
+    return -navx.getAngle(); 
   }
  
   public void resetNavx(){
@@ -210,18 +212,20 @@ m_driveSim = new DifferentialDrivetrainSim(
       }
     
      }
-
     public Pose2d getPose() {
       return odometry.getPoseMeters();
     }
-    
-    
+    public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+      return new DifferentialDriveWheelSpeeds(getLeftSpeed(), getRightSpeed());
+    }
     public void resetOdometry(Pose2d pose) {
       resetEncoders();
       odometry.resetPosition(
           navx.getRotation2d(), getLeftDistance(), getRightDistance(), pose);
     }
-  
+    public void arcadeDrive(double fwd, double rot) {
+      drive.arcadeDrive(fwd, rot);
+    }
   @Override
   public void simulationPeriodic() {
     
@@ -258,8 +262,27 @@ m_driveSim = new DifferentialDrivetrainSim(
   public double getAverageEncoderDistance() {
     return (getLeftDistance() + getRightDistance()) / 2.0;
   }
-    public double getTurnRate() {
-      return -navx.getRate();
-    
+  public void zeroHeading() {
+    navx.reset();
   }
+
+  public void setMaxOutput(double maxOutput) {
+    drive.setMaxOutput(maxOutput);
+  }
+
+  /**
+   * Returns the heading of the robot.
+   *
+   * @return the robot's heading in degrees, from -180 to 180
+   */
+  public double getHeading() {
+    return -navx.getRotation2d().getDegrees();
+  }
+  
+  public double getTurnRate() {
+      return -navx.getRate();
+  }    
+  public Field2d getField2d() {
+    return m_Field;
+   }
 }

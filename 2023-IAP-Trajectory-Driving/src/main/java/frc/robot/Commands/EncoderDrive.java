@@ -7,7 +7,6 @@ package frc.robot.Commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.Encoder;
 import frc.robot.Subsystems.DriveTrain;
 
 public class EncoderDrive extends CommandBase {
