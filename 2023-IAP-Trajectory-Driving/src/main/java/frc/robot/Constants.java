@@ -16,8 +16,10 @@ import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
  */
 public final class Constants {
     public static final class OperatorConstants {
-        public static final int LeftDriveTalonPort = 2; 
-        public static final int RightDriveTalonPort = 3;
+        public static final int LeftDriveTalonPort = 1; 
+        public static final int RightDriveTalonPort = 2;
+        public static final int LeftDriveVictorPort = 4;
+        public static final int RightDriveVictorPort = 5;
         public static final int wheelDiameterInInches = 6;  
         public static final double kp = 0.3/90;
         public static final double ki = 0.002;

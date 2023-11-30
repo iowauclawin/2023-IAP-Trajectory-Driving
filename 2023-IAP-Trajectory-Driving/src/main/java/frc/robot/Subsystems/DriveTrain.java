@@ -222,6 +222,8 @@ m_driveSim = new DifferentialDrivetrainSim(
       resetEncoders();
       odometry.resetPosition(
           navx.getRotation2d(), getLeftDistance(), getRightDistance(), pose);
+          m_driveSim.setPose(pose);
+          m_Field.setRobotPose(pose);
     }
     public void arcadeDrive(double fwd, double rot) {
       drive.arcadeDrive(fwd, rot);

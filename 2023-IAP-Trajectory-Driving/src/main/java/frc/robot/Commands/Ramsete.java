@@ -25,7 +25,7 @@ import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
 public class Ramsete extends SequentialCommandGroup { //Creates a new ramsete
-    String trajectoryJSON = "pathplanner/generatedJSON/New New New Path.wpilib.json"; //Makes variable trajectoryJSON, which is composed of letters, string.
+    String trajectoryJSON = "pathplanner/generatedJSON/New Path.wpilib.json"; //Makes variable trajectoryJSON, which is composed of letters, string.
     Trajectory trajectory = new Trajectory(); //Creates the object trajectory in the Trajectory class
     
     public Ramsete() {
@@ -65,7 +65,7 @@ public class Ramsete extends SequentialCommandGroup { //Creates a new ramsete
             RobotContainer.dt);
 
         RobotContainer.dt.getField2d().getObject("traj").setTrajectory(trajectory);
-
+        RobotContainer.dt.resetOdometry(trajectory.getInitialPose());
         CommandBase ramc = ramseteCommand.handleInterrupt(() -> RobotContainer.dt.tankDrive(0.0, 0.0))
             .andThen(() -> RobotContainer.dt.tankDrive(0.0, 0.0));
         
